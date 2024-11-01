@@ -40,13 +40,14 @@ public interface Users {
 	
 	/**
 	 * Deletes the user identified by userId
+	 *
 	 * @param userId - the userId of the user
-	 * @param pwd - password of the user
+	 * @param pwd    - password of the user
 	 * @return OK and the deleted user object, if the name exists and pwd matches the
-	 *         existing password 
-	 *         FORBIDDEN if the password is incorrect 
-	 *         NOT_FOUND if no user exists with the provided name
-	 *         BAD_REQUEST otherwise
+	 * existing password
+	 * FORBIDDEN if the password is incorrect
+	 * NOT_FOUND if no user exists with the provided name
+	 * BAD_REQUEST otherwise
 	 */
 	Result<User> deleteUser(String userId, String pwd);
 	

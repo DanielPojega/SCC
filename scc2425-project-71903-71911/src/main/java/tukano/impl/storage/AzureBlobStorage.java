@@ -41,7 +41,15 @@ public class AzureBlobStorage implements BlobStorage {
 
     @Override
     public Result<Void> delete(String path) {
-        return null;
+        BlobClient blobClient = containerClient.getBlobClient(path);
+
+        if (!blobClient.exists()) {
+            System.out.println("Blob does not exist.");
+            return error(NOT_FOUND);
+        }
+
+        blobClient.delete();
+        return ok();
     }
 
     @Override
