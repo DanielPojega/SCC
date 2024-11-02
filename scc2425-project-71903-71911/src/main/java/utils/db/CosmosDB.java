@@ -1,4 +1,4 @@
-package main.java.utils.db;
+package utils.db;
 
 import com.azure.cosmos.*;
 import com.azure.cosmos.models.CosmosItemRequestOptions;
@@ -6,8 +6,8 @@ import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.models.CosmosQueryRequestOptions;
 import com.azure.cosmos.models.PartitionKey;
 import com.azure.cosmos.util.CosmosPagedIterable;
-import main.java.tukano.api.Result;
-import main.java.tukano.api.User;
+import tukano.api.Result;
+import tukano.api.User;
 
 import java.util.List;
 import java.util.function.Supplier;
