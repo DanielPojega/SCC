@@ -1,17 +1,17 @@
 package utils;
 
 
-import redis.clients.jedis.JedisPoolConfig;
 import tukano.api.Result;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.List;
 
 public class RedisCache {
     private static final String RedisHostname = "";
     private static final String RedisKey = "";
-    private static final int REDIS_PORT = 6380;
+    private static final int REDIS_PORT = 0;
     private static final int REDIS_TIMEOUT = 1000;
     private static final boolean Redis_USE_TLS = true;
 
@@ -47,6 +47,7 @@ public class RedisCache {
     public <T> Result<T> get(String key, Class<T> clazz){
         try (Jedis jedis = getCachePool().getResource()) {
             String value = jedis.get(key);
+            if (value == null) return Result.ok(null);
             return Result.ok(JSON.decode(value, clazz));
         } catch (Exception e) {
             return Result.error(Result.ErrorCode.INTERNAL_ERROR);

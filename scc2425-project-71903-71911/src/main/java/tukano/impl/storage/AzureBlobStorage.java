@@ -16,13 +16,14 @@ import static tukano.api.Result.ok;
 
 public class AzureBlobStorage implements BlobStorage {
 
-    private static final String BLOBS_CONTAINER_NAME = "images";
+    private static final String BLOBS_CONTAINER_NAME = "";
+
     private static final String storageConnectionString = "";
+
     BlobContainerClient containerClient = new BlobContainerClientBuilder()
             .connectionString(storageConnectionString)
             .containerName(BLOBS_CONTAINER_NAME)
             .buildClient();
-
     @Override
     public Result<Void> write(byte[] bytes) {
         String key = Hash.of(bytes);

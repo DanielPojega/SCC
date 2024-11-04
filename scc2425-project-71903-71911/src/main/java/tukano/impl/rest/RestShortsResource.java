@@ -12,7 +12,7 @@ import tukano.impl.JavaShorts;
 public class RestShortsResource extends RestResource implements RestShorts {
 
 	static final Shorts impl = JavaShorts.getInstance();
-		
+
 	@Override
 	public Short createShort(String userId, String password) {
 		return super.resultOrThrow( impl.createShort(userId, password));
@@ -33,32 +33,12 @@ public class RestShortsResource extends RestResource implements RestShorts {
 	}
 
 	@Override
-	public void follow(String userId1, String userId2, boolean isFollowing, String password) {
-		super.resultOrThrow( impl.follow(userId1, userId2, isFollowing, password));
-	}
-
-	@Override
-	public List<String> followers(String userId, String password) {
-		return super.resultOrThrow( impl.followers(userId, password));
-	}
-
-	@Override
-	public void like(String shortId, String userId, boolean isLiked, String password) {
-		super.resultOrThrow( impl.like(shortId, userId, isLiked, password));
-	}
-
-	@Override
-	public List<String> likes(String shortId, String password) {
-		return super.resultOrThrow( impl.likes(shortId, password));
-	}
-
-	@Override
 	public List<String> getFeed(String userId, String password) {
 		return super.resultOrThrow( impl.getFeed(userId, password));
 	}
 
 	@Override
-	public void deleteAllShorts(String userId, String password, String token) {
-		super.resultOrThrow( impl.deleteAllShorts(userId, password, token));
-	}	
+	public void deleteAllShorts(String userId, String password) {
+		super.resultOrThrow( impl.deleteAllShorts(userId, password));
+	}
 }

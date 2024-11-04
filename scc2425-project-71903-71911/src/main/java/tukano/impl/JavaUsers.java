@@ -15,9 +15,9 @@ import java.util.logging.Logger;
 import tukano.api.Result;
 import tukano.api.User;
 import tukano.api.Users;
+import utils.JSON;
 import utils.RedisCache;
 import utils.db.CosmosDB;
-import utils.JSON;
 
 public class JavaUsers implements Users {
 
@@ -44,24 +44,25 @@ public class JavaUsers implements Users {
 		if( badUserInfo( user ) )
 			return error(BAD_REQUEST);
 
-		return errorOrValue( db.insert(user), user.getUserId() );
+		return errorOrValue( db.insert(user), user.getId() );
 	}
 
 	@Override
 	public Result<User> getUser(String userId, String pwd) {
 		Log.info( () -> format("getUser : userId = %s, pwd = %s\n", userId, pwd));
 
-
 		if (userId == null) return error(BAD_REQUEST);
 
 		String key = User.class.getName() + "" + userId;
 
 		Result<User> cachedUser = cache.get(key, User.class);
+
 		if (cachedUser.value() != null) {
 			return validatedUserOrError(cachedUser, pwd);
 		}
 
 		Result<User> user = db.get(userId, User.class);
+
 		cache.insert(key, user.value());
 
 		return validatedUserOrError(user, pwd);
@@ -99,7 +100,7 @@ public class JavaUsers implements Users {
 
 			// Delete user shorts and related info asynchronously in a separate thread
 			Executors.defaultThreadFactory().newThread( () -> {
-				JavaShorts.getInstance().deleteAllShorts(userId, pwd, Token.get(userId));
+				JavaShorts.getInstance().deleteAllShorts(userId, pwd);
 				JavaBlobs.getInstance().deleteAllBlobs(userId, Token.get(userId));
 			}).start();
 			Result<User> deleteResult = (Result<User>) db.delete(user);
@@ -117,13 +118,15 @@ public class JavaUsers implements Users {
 		Log.info( () -> format("searchUsers : patterns = %s\n", pattern));
 
 		Result<List<String>> cachedList = cache.getList(pattern);
-		if (cachedList.value() != null) {
+		cache.expire(pattern, 60);
+
+		if (!cachedList.value().isEmpty()) {
 			return ok(cachedList.value().stream().map(userString ->
 					JSON.decode(userString, User.class)
 			).toList());
 		}
 
-		var query = format("SELECT * FROM User u WHERE UPPER(u.userId) LIKE '%%%s%%'", pattern.toUpperCase());
+		var query = format("SELECT * FROM User u WHERE UPPER(u.id) LIKE '%%%s%%'", pattern.toUpperCase());
 		var hits = db.sql(query, User.class)
 				.value()
 				.stream()
@@ -131,7 +134,6 @@ public class JavaUsers implements Users {
 				.toList();
 
 		cache.insertList(pattern, hits);
-		cache.expire(pattern, 200);
 
 		return ok(hits);
 	}
@@ -149,6 +151,6 @@ public class JavaUsers implements Users {
 	}
 
 	private boolean badUpdateUserInfo( String userId, String pwd, User info) {
-		return (userId == null || pwd == null || info.getUserId() != null && ! userId.equals( info.getUserId()));
+		return (userId == null || pwd == null || info.getId() != null && ! userId.equals( info.getId()));
 	}
 }

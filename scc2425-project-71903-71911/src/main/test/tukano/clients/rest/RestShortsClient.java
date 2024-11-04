@@ -8,6 +8,8 @@ import jakarta.ws.rs.core.MediaType;
 import tukano.api.Result;
 import tukano.api.Short;
 import tukano.api.Shorts;
+import tukano.api.rest.RestFollowing;
+import tukano.api.rest.RestLikes;
 import tukano.api.rest.RestShorts;
 
 public class RestShortsClient extends RestClient implements Shorts{
@@ -19,114 +21,113 @@ public class RestShortsClient extends RestClient implements Shorts{
 	public Result<Short> _createShort(String userId, String password) {
 		return super.toJavaResult(
 				target
-				.path(userId)
-				.queryParam(RestShorts.PWD, password )
-				.request()
-				.accept(MediaType.APPLICATION_JSON)
-				.post( Entity.json(null)), Short.class);
+						.path(userId)
+						.queryParam(RestShorts.PWD, password )
+						.request()
+						.accept(MediaType.APPLICATION_JSON)
+						.post( Entity.json(null)), Short.class);
 	}
 
 	public Result<Void> _deleteShort(String shortId, String password) {
 		return super.toJavaResult(
 				target
-				.path(shortId)
-				.queryParam(RestShorts.PWD, password )
-				.request()
-				.delete());
+						.path(shortId)
+						.queryParam(RestShorts.PWD, password )
+						.request()
+						.delete());
 	}
 
 	public Result<Short> _getShort(String shortId) {
 		return super.toJavaResult(
 				target
-				.path(shortId)
-				.request()
-				.get(), Short.class);
+						.path(shortId)
+						.request()
+						.get(), Short.class);
 	}
 
 	public Result<List<String>> _getShorts(String userId) {
 		return super.toJavaResult(
 				target
-				.path(userId)
-				.path(RestShorts.SHORTS)
-				.request()
-				.accept( MediaType.APPLICATION_JSON)
-				.get(), new GenericType<List<String>>() {});
+						.path(userId)
+						.path(RestShorts.SHORTS)
+						.request()
+						.accept( MediaType.APPLICATION_JSON)
+						.get(), new GenericType<List<String>>() {});
 	}
 
 	public Result<Void> _follow(String userId1, String userId2, boolean isFollowing, String password) {
 		return super.toJavaResult(
 				target
-				.path(userId1)
-				.path(userId2)
-				.path(RestShorts.FOLLOWERS)
-				.queryParam(RestShorts.PWD, password )
-				.request()
-				.post( Entity.entity(isFollowing, MediaType.APPLICATION_JSON)));
+						.path(userId1)
+						.path(userId2)
+						.path(RestFollowing.FOLLOWERS)
+						.queryParam(RestShorts.PWD, password )
+						.request()
+						.post( Entity.entity(isFollowing, MediaType.APPLICATION_JSON)));
 	}
 
 	public Result<List<String>> _followers(String userId, String password) {
 		return super.toJavaResult(
 				target
-				.path(userId)
-				.path(RestShorts.FOLLOWERS)
-				.queryParam(RestShorts.PWD, password )
-				.request()
-				.accept( MediaType.APPLICATION_JSON)
-				.get(), new GenericType<List<String>>() {});
+						.path(userId)
+						.path(RestFollowing.FOLLOWERS)
+						.queryParam(RestShorts.PWD, password )
+						.request()
+						.accept( MediaType.APPLICATION_JSON)
+						.get(), new GenericType<List<String>>() {});
 	}
 
 	public Result<Void> _like(String shortId, String userId, boolean isLiked, String password) {
 		return super.toJavaResult(
 				target
-				.path(shortId)
-				.path(userId)
-				.path(RestShorts.LIKES)
-				.queryParam(RestShorts.PWD, password )
-				.request()
-				.post( Entity.entity(isLiked, MediaType.APPLICATION_JSON)));
+						.path(shortId)
+						.path(userId)
+						.path(RestLikes.LIKES)
+						.queryParam(RestShorts.PWD, password )
+						.request()
+						.post( Entity.entity(isLiked, MediaType.APPLICATION_JSON)));
 	}
 
 	public Result<List<String>> _likes(String shortId, String password) {
 		return super.toJavaResult(
 				target
-				.path(shortId)
-				.path(RestShorts.LIKES)
-				.queryParam(RestShorts.PWD, password )
-				.request()
-				.accept( MediaType.APPLICATION_JSON)
-				.get(), new GenericType<List<String>>() {});
+						.path(shortId)
+						.path(RestLikes.LIKES)
+						.queryParam(RestShorts.PWD, password )
+						.request()
+						.accept( MediaType.APPLICATION_JSON)
+						.get(), new GenericType<List<String>>() {});
 	}
 
 	public Result<List<String>> _getFeed(String userId, String password) {
 		return super.toJavaResult(
 				target
-				.path(userId)
-				.path(RestShorts.FEED)
-				.queryParam(RestShorts.PWD, password )
-				.request()
-				.accept( MediaType.APPLICATION_JSON)
-				.get(), new GenericType<List<String>>() {});
+						.path(userId)
+						.path(RestShorts.FEED)
+						.queryParam(RestShorts.PWD, password )
+						.request()
+						.accept( MediaType.APPLICATION_JSON)
+						.get(), new GenericType<List<String>>() {});
 	}
 
-	public Result<Void> _deleteAllShorts(String userId, String password, String token) {
+	public Result<Void> _deleteAllShorts(String userId, String password) {
 		return super.toJavaResult(
 				target
-				.path(userId)
-				.path(RestShorts.SHORTS)
-				.queryParam(RestShorts.PWD, password )
-				.queryParam(RestShorts.TOKEN, token )
-				.request()
-				.delete());
+						.path(userId)
+						.path(RestShorts.SHORTS)
+						.queryParam(RestShorts.PWD, password )
+						.request()
+						.delete());
 	}
-	
+
 	public Result<Void> _verifyBlobURI(String blobId) {
 		return super.toJavaResult(
 				target
-				.path(blobId)
-				.request()
-				.get());
+						.path(blobId)
+						.request()
+						.get());
 	}
-		
+
 	@Override
 	public Result<Short> createShort(String userId, String password) {
 		return super.reTry( () -> _createShort(userId, password));
@@ -147,7 +148,7 @@ public class RestShortsClient extends RestClient implements Shorts{
 		return super.reTry( () -> _getShorts(userId));
 	}
 
-	@Override
+	/*@Override
 	public Result<Void> follow(String userId1, String userId2, boolean isFollowing, String password) {
 		return super.reTry( () -> _follow(userId1, userId2, isFollowing, password));
 	}
@@ -165,7 +166,7 @@ public class RestShortsClient extends RestClient implements Shorts{
 	@Override
 	public Result<List<String>> likes(String shortId, String password) {
 		return super.reTry( () -> _likes(shortId, password));
-	}
+	}*/
 
 	@Override
 	public Result<List<String>> getFeed(String userId, String password) {
@@ -173,7 +174,7 @@ public class RestShortsClient extends RestClient implements Shorts{
 	}
 
 	@Override
-	public Result<Void> deleteAllShorts(String userId, String password, String token) {
-		return super.reTry( () -> _deleteAllShorts(userId, password, token));
+	public Result<Void> deleteAllShorts(String userId, String password) {
+		return super.reTry( () -> _deleteAllShorts(userId, password));
 	}
 }

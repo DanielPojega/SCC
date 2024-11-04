@@ -2,13 +2,9 @@ package utils.db;
 
 import com.azure.cosmos.*;
 import com.azure.cosmos.models.CosmosItemRequestOptions;
-import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.models.CosmosQueryRequestOptions;
 import com.azure.cosmos.models.PartitionKey;
-import com.azure.cosmos.util.CosmosPagedIterable;
 import tukano.api.Result;
-import tukano.api.User;
-
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -16,7 +12,7 @@ public class CosmosDB {
 
     private static final String CONNECTION_URL = "";
     private static final String DB_KEY = "";
-    private static final String DB_NAME = "scc-71911";
+    private static final String DB_NAME = "scc2425";
 
     private CosmosClient client;
 
@@ -24,12 +20,7 @@ public class CosmosDB {
 
     private CosmosContainer container;
 
-    private static CosmosDB instance;
-
     public static synchronized CosmosDB getInstance(String containerName) {
-        if( instance != null)
-            return instance;
-
         CosmosClient client = new CosmosClientBuilder()
                 .endpoint(CONNECTION_URL)
                 .key(DB_KEY)
@@ -38,8 +29,7 @@ public class CosmosDB {
                 .connectionSharingAcrossClientsEnabled(true)
                 .contentResponseOnWriteEnabled(true)
                 .buildClient();
-        instance = new CosmosDB(client, containerName);
-        return instance;
+        return new CosmosDB(client, containerName);
     }
 
     public CosmosDB(CosmosClient client, String containerName) {
@@ -90,7 +80,7 @@ public class CosmosDB {
         try {
             return Result.ok(supplierFunc.get());
         } catch (CosmosException ce) {
-            //ce.printStackTrace();
+            System.err.println("CosmosException: Status code = " + ce.getStatusCode() + ", Message = " + ce.getMessage());
             return Result.error(errorCodeFromStatus(ce.getStatusCode()));
         } catch (Exception x) {
             x.printStackTrace();

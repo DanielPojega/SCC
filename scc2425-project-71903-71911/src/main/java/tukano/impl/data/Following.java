@@ -8,22 +8,25 @@ import jakarta.persistence.Id;
 @Entity
 public class Following{
 
-	@Id 
-	String follower;
-	
-	@Id 
-	String followee;
+	@Id
+	private String id;
+	private String follower;
+	private String followee;
 
 	public Following(String follower, String followee) {
 		super();
 		this.follower = follower;
 		this.followee = followee;
+		this.id = follower + "_" + followee;
 	}
 
 	public Following() {
 		super();
 	}
 
+	public String getId() {
+		return id;
+	}
 	public String getFollower() {
 		return follower;
 	}
@@ -61,6 +64,6 @@ public class Following{
 	public String toString() {
 		return "Following [follower=" + follower + ", followee=" + followee + "]";
 	}
-	
-	
+
+
 }

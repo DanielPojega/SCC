@@ -1,0 +1,80 @@
+package tukano.impl;
+
+import tukano.api.LikesI;
+import tukano.api.Result;
+import tukano.api.User;
+import tukano.impl.data.Likes;
+import utils.RedisCache;
+import utils.db.CosmosDB;
+
+import java.util.List;
+import java.util.logging.Logger;
+
+import static java.lang.String.format;
+import static tukano.api.Result.*;
+import static tukano.api.Result.ErrorCode.OK;
+
+public class JavaLikes implements LikesI {
+
+    private static Logger Log = Logger.getLogger(JavaLikes.class.getName());
+
+    private final CosmosDB db = CosmosDB.getInstance("likes");
+
+    private final RedisCache cache = new RedisCache();
+
+    private static LikesI instance;
+
+    synchronized public static LikesI getInstance() {
+        if (instance == null)
+            instance = new JavaLikes();
+        return instance;
+    }
+
+    private JavaLikes() {
+    }
+
+    @Override
+    public Result<Void> like(String shortId, String userId, boolean isLiked, String password) {
+        Log.info(() -> format("like : id = %s, userId = %s, isLiked = %s, pwd = %s\n", shortId, userId, isLiked, password));
+
+        return errorOrResult( JavaShorts.getInstance().getShort(shortId), shrt -> {
+            var l = new Likes(userId, shortId, shrt.getOwnerId());
+
+            Result<Void> res = errorOrVoid( okUser(userId, password), isLiked ? db.insert( l ) : db.delete( l ));
+            if (res.isOK()) {
+                cache.delete("likes:" + shortId);
+            }
+            return res;
+        });
+    }
+
+    @Override
+    public Result<List<String>> likes(String shortId, String password) {
+        Log.info(() -> format("likes : id = %s, pwd = %s\n", shortId, password));
+
+        Result<List<String>> cachedList = cache.getList("likes:" + shortId);
+        if (!cachedList.value().isEmpty()) {
+            return ok(cachedList.value());
+        }
+
+        return errorOrResult( JavaShorts.getInstance().getShort(shortId), shrt -> {
+
+            var query = format("SELECT l.userId FROM Likes l WHERE l.shortId = '%s'", shortId);
+
+            Result<List<Likes>> results = errorOrValue( okUser( shrt.getOwnerId(), password ), db.sql(query, Likes.class));
+
+            if (results.error() != OK) {
+                return error(results.error());
+            }
+
+            List<String> likes = results.value().stream().map(Likes::getUserId).toList();
+
+            cache.insertList("likes:" + shortId, likes);
+            return ok(likes);
+        });
+    }
+
+    protected Result<User> okUser(String userId, String pwd) {
+        return JavaUsers.getInstance().getUser(userId, pwd);
+    }
+}

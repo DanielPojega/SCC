@@ -5,27 +5,28 @@ import jakarta.persistence.Id;
 
 @Entity
 public class User {
-	
+
 	@Id
-	private String userId;
+	private String id;
+
 	private String pwd;
-	private String email;	
+	private String email;
 	private String displayName;
 
 	public User() {}
-	
-	public User(String userId, String pwd, String email, String displayName) {
+
+	public User(String id, String pwd, String email, String displayName) {
 		this.pwd = pwd;
 		this.email = email;
-		this.userId = userId;
+		this.id = id;
 		this.displayName = displayName;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getId() {
+		return id;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setId(String userId) {
+		this.id = userId;
 	}
 	public String getPwd() {
 		return pwd;
@@ -45,36 +46,36 @@ public class User {
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
-	
+
 	public String userId() {
-		return userId;
+		return id;
 	}
-	
+
 	public String pwd() {
 		return pwd;
 	}
-	
+
 	public String email() {
 		return email;
 	}
-	
+
 	public String displayName() {
 		return displayName;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", pwd=" + pwd + ", email=" + email + ", displayName=" + displayName + "]";
+		return "User [userId=" + id + ", pwd=" + pwd + ", email=" + email + ", displayName=" + displayName + "]";
 	}
-	
+
 	public User copyWithoutPassword() {
-		return new User(userId, "", email, displayName);
+		return new User(id, "", email, displayName);
 	}
-	
+
 	public User updateFrom( User other ) {
-		return new User( userId, 
+		return new User(id,
 				other.pwd != null ? other.pwd : pwd,
-				other.email != null ? other.email : email, 
+				other.email != null ? other.email : email,
 				other.displayName != null ? other.displayName : displayName);
 	}
 }

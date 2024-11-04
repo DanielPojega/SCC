@@ -43,6 +43,8 @@ public class TukanoRestServer extends Application {
 		resources.add(RestBlobsResource.class);
 		resources.add(RestUsersResource.class);
 		resources.add(RestShortsResource.class);
+		resources.add(RestFollowingResource.class);
+		resources.add(RestLikesResource.class);
 	}
 
 	protected void start() throws Exception {
@@ -52,6 +54,8 @@ public class TukanoRestServer extends Application {
 		config.register(RestBlobsResource.class);
 		config.register(RestUsersResource.class);
 		config.register(RestShortsResource.class);
+		config.register(RestFollowingResource.class);
+		config.register(RestLikesResource.class);
 
 		JdkHttpServerFactory.createHttpServer( URI.create(serverURI.replace(IP.hostname(), INETADDR_ANY)), config);
 
