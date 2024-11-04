@@ -1,18 +1,18 @@
-package tukano.impl.storage;
+package main.java.tukano.impl.storage;
 
 import com.azure.core.util.BinaryData;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
-import tukano.api.Result;
-import utils.Hash;
+import main.java.tukano.api.Result;
+import main.java.utils.Hash;
 
 import java.util.function.Consumer;
 
-import static tukano.api.Result.ErrorCode.CONFLICT;
-import static tukano.api.Result.ErrorCode.NOT_FOUND;
-import static tukano.api.Result.error;
-import static tukano.api.Result.ok;
+import static main.java.tukano.api.Result.ErrorCode.CONFLICT;
+import static main.java.tukano.api.Result.ErrorCode.NOT_FOUND;
+import static main.java.tukano.api.Result.error;
+import static main.java.tukano.api.Result.ok;
 
 public class AzureBlobStorage implements BlobStorage {
 

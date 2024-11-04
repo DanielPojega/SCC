@@ -1,10 +1,10 @@
-package utils.db;
+package main.java.utils.db;
 
 import com.azure.cosmos.*;
 import com.azure.cosmos.models.CosmosItemRequestOptions;
 import com.azure.cosmos.models.CosmosQueryRequestOptions;
 import com.azure.cosmos.models.PartitionKey;
-import tukano.api.Result;
+import main.java.tukano.api.Result;
 import java.util.List;
 import java.util.function.Supplier;
 

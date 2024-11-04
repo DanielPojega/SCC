@@ -1,18 +1,18 @@
-package tukano.impl;
+package main.java.tukano.impl;
 
-import tukano.api.LikesI;
-import tukano.api.Result;
-import tukano.api.User;
-import tukano.impl.data.Likes;
-import utils.RedisCache;
-import utils.db.CosmosDB;
+import main.java.tukano.api.LikesI;
+import main.java.tukano.api.Result;
+import main.java.tukano.api.User;
+import main.java.tukano.impl.data.Likes;
+import main.java.utils.RedisCache;
+import main.java.utils.db.CosmosDB;
 
 import java.util.List;
 import java.util.logging.Logger;
 
 import static java.lang.String.format;
-import static tukano.api.Result.*;
-import static tukano.api.Result.ErrorCode.OK;
+import static main.java.tukano.api.Result.*;
+import static main.java.tukano.api.Result.ErrorCode.OK;
 
 public class JavaLikes implements LikesI {
 

@@ -1,4 +1,4 @@
-package tukano.impl.rest;
+package main.java.tukano.impl.rest;
 
 import java.net.URI;
 import java.util.HashSet;
@@ -9,9 +9,9 @@ import jakarta.ws.rs.core.Application;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import tukano.impl.Token;
-import utils.Args;
-import utils.IP;
+import main.java.tukano.impl.Token;
+import main.java.utils.Args;
+import main.java.utils.IP;
 
 
 public class TukanoRestServer extends Application {

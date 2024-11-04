@@ -1,7 +1,7 @@
-package utils.db;
+package main.java.utils.db;
 
-import tukano.api.Result;
-import tukano.api.User;
+import main.java.tukano.api.Result;
+import main.java.tukano.api.User;
 
 import java.sql.*;
 import java.util.ArrayList;

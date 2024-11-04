@@ -1,7 +1,7 @@
-package utils;
+package main.java.utils;
 
 
-import tukano.api.Result;
+import main.java.tukano.api.Result;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;

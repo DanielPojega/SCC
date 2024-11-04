@@ -1,20 +1,20 @@
-package tukano.impl;
+package main.java.tukano.impl;
 
-import tukano.api.FollowingI;
-import tukano.api.Result;
-import tukano.api.User;
-import tukano.impl.data.Following;
-import utils.RedisCache;
-import utils.db.CosmosDB;
+import main.java.tukano.api.FollowingI;
+import main.java.tukano.api.Result;
+import main.java.tukano.api.User;
+import main.java.tukano.impl.data.Following;
+import main.java.utils.RedisCache;
+import main.java.utils.db.CosmosDB;
 
 import java.util.List;
 import java.util.logging.Logger;
 
 import static java.lang.String.format;
-import static tukano.api.Result.*;
-import static tukano.api.Result.ErrorCode.FORBIDDEN;
-import static tukano.api.Result.ErrorCode.OK;
-import static tukano.api.Result.ok;
+import static main.java.tukano.api.Result.*;
+import static main.java.tukano.api.Result.ErrorCode.FORBIDDEN;
+import static main.java.tukano.api.Result.ErrorCode.OK;
+import static main.java.tukano.api.Result.ok;
 
 public class JavaFollowing implements FollowingI {
 
@@ -39,7 +39,7 @@ public class JavaFollowing implements FollowingI {
         Log.info(() -> format("follow : userId1 = %s, userId2 = %s, isFollowing = %s, pwd = %s\n", userId1, userId2, isFollowing, password));
 
         return errorOrResult( okUser(userId1, password), user -> {
-            var f = new tukano.impl.data.Following(userId1, userId2);
+            var f = new Following(userId1, userId2);
             Result<Void> res = errorOrVoid( okUser( userId2), isFollowing ? db.insert( f ) : db.delete( f ));
             if (res.isOK()) {
                 if (isFollowing) {

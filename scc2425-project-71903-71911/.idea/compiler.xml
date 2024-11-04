@@ -7,7 +7,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="tukano" />
-        <module name="scc2425-project-71903-71911" />
       </profile>
     </annotationProcessing>
   </component>

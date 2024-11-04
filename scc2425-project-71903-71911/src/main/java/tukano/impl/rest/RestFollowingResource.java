@@ -1,9 +1,9 @@
-package tukano.impl.rest;
+package main.java.tukano.impl.rest;
 
 import jakarta.inject.Singleton;
-import tukano.api.FollowingI;
-import tukano.api.rest.RestFollowing;
-import tukano.impl.JavaFollowing;
+import main.java.tukano.api.FollowingI;
+import main.java.tukano.api.rest.RestFollowing;
+import main.java.tukano.impl.JavaFollowing;
 
 import java.util.List;
 

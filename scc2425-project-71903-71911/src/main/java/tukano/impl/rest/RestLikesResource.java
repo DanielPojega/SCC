@@ -1,9 +1,9 @@
-package tukano.impl.rest;
+package main.java.tukano.impl.rest;
 
 import jakarta.inject.Singleton;
-import tukano.api.LikesI;
-import tukano.api.rest.RestLikes;
-import tukano.impl.JavaLikes;
+import main.java.tukano.api.LikesI;
+import main.java.tukano.api.rest.RestLikes;
+import main.java.tukano.impl.JavaLikes;
 
 import java.util.List;
 

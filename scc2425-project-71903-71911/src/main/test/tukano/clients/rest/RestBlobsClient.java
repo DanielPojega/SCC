@@ -1,12 +1,12 @@
-package tukano.clients.rest;
+package main.test.tukano.clients.rest;
 
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
-import tukano.api.Blobs;
-import tukano.api.Result;
-import tukano.api.rest.RestBlobs;
+import main.java.tukano.api.Blobs;
+import main.java.tukano.api.Result;
+import main.java.tukano.api.rest.RestBlobs;
 
-public class RestBlobsClient extends tukano.clients.rest.RestClient implements Blobs {
+public class RestBlobsClient extends RestClient implements Blobs {
 
 	public RestBlobsClient(String serverURI) {
 		super(serverURI, RestBlobs.PATH);
