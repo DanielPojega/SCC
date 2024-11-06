@@ -20,7 +20,7 @@ import main.java.utils.RedisCache;
 import main.java.utils.db.CosmosDB;
 
 public class JavaUsers implements Users {
-
+	
 	private static Logger Log = Logger.getLogger(JavaUsers.class.getName());
 
 	private final CosmosDB db = CosmosDB.getInstance("users");
@@ -28,21 +28,21 @@ public class JavaUsers implements Users {
 	private final RedisCache cache = new RedisCache();
 
 	private static Users instance;
-
+	
 	synchronized public static Users getInstance() {
 		if( instance == null )
 			instance = new JavaUsers();
 		return instance;
 	}
-
+	
 	private JavaUsers() {}
-
+	
 	@Override
 	public Result<String> createUser(User user) {
 		Log.info(() -> format("createUser : %s\n", user));
 
 		if( badUserInfo( user ) )
-			return error(BAD_REQUEST);
+				return error(BAD_REQUEST);
 
 		return errorOrValue( db.insert(user), user.getId() );
 	}
@@ -132,24 +132,25 @@ public class JavaUsers implements Users {
 				.stream()
 				.map(User::copyWithoutPassword)
 				.toList();
+		System.out.println(hits);
 
 		cache.insertList(pattern, hits);
 
 		return ok(hits);
 	}
 
-
+	
 	private Result<User> validatedUserOrError( Result<User> res, String pwd ) {
 		if( res.isOK())
 			return res.value().getPwd().equals( pwd ) ? res : error(FORBIDDEN);
 		else
 			return res;
 	}
-
+	
 	private boolean badUserInfo( User user) {
 		return (user.userId() == null || user.pwd() == null || user.displayName() == null || user.email() == null);
 	}
-
+	
 	private boolean badUpdateUserInfo( String userId, String pwd, User info) {
 		return (userId == null || pwd == null || info.getId() != null && ! userId.equals( info.getId()));
 	}

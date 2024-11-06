@@ -2,16 +2,21 @@ package main.java.utils.db;
 
 import com.azure.cosmos.*;
 import com.azure.cosmos.models.CosmosItemRequestOptions;
+import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.models.CosmosQueryRequestOptions;
 import com.azure.cosmos.models.PartitionKey;
+import com.azure.cosmos.util.CosmosPagedIterable;
 import main.java.tukano.api.Result;
+import main.java.tukano.api.User;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
 public class CosmosDB {
 
-    private static final String CONNECTION_URL = "";
-    private static final String DB_KEY = "";
+    private static final String CONNECTION_URL = "https://scc71911.documents.azure.com:443/";
+    private static final String DB_KEY = "28TNOlRmlWcJ6sPjfwfPxLGQJm9INT2dgAO87VnZqkw0umH3LO5bt1aeorRCuIEIHk4TMe7u6glpACDbEZ7vpQ==";
     private static final String DB_NAME = "scc2425";
 
     private CosmosClient client;

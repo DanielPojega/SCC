@@ -9,9 +9,9 @@ import redis.clients.jedis.JedisPoolConfig;
 import java.util.List;
 
 public class RedisCache {
-    private static final String RedisHostname = "";
-    private static final String RedisKey = "";
-    private static final int REDIS_PORT = 0;
+    private static final String RedisHostname = "scc2425cache71911.redis.cache.windows.net";
+    private static final String RedisKey = "nR9npgLBYIggyAFoi747ivt892VQ8xrHvAzCaOfkTqY=";
+    private static final int REDIS_PORT = 6380;
     private static final int REDIS_TIMEOUT = 1000;
     private static final boolean Redis_USE_TLS = true;
 

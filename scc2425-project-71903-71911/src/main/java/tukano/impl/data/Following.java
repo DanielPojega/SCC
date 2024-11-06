@@ -64,6 +64,6 @@ public class Following{
 	public String toString() {
 		return "Following [follower=" + follower + ", followee=" + followee + "]";
 	}
-
-
+	
+	
 }

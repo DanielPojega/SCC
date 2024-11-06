@@ -12,7 +12,7 @@ import main.java.tukano.impl.JavaShorts;
 public class RestShortsResource extends RestResource implements RestShorts {
 
 	static final Shorts impl = JavaShorts.getInstance();
-
+		
 	@Override
 	public Short createShort(String userId, String password) {
 		return super.resultOrThrow( impl.createShort(userId, password));
@@ -40,5 +40,5 @@ public class RestShortsResource extends RestResource implements RestShorts {
 	@Override
 	public void deleteAllShorts(String userId, String password) {
 		super.resultOrThrow( impl.deleteAllShorts(userId, password));
-	}
+	}	
 }

@@ -31,26 +31,26 @@ public class JavaShorts implements Shorts {
 	private final CosmosDB db = CosmosDB.getInstance("shorts");
 
 	private final RedisCache cache = new RedisCache();
-
+	
 	private static Shorts instance;
-
+	
 	synchronized public static Shorts getInstance() {
 		if( instance == null )
 			instance = new JavaShorts();
 		return instance;
 	}
-
+	
 	private JavaShorts() {}
-
-
+	
+	
 	@Override
 	public Result<Short> createShort(String userId, String password) {
 		Log.info(() -> format("createShort : userId = %s, pwd = %s\n", userId, password));
 
 		return errorOrResult( okUser(userId, password), user -> {
-
+			
 			var shortId = format("%s+%s", userId, UUID.randomUUID());
-			var blobUrl = format("%s/%s/%s", TukanoRestServer.serverURI, Blobs.NAME, shortId);
+			var blobUrl = format("%s/%s/%s", TukanoRestServer.serverURI, Blobs.NAME, shortId); 
 			var shrt = new Short(shortId, userId, blobUrl);
 
 			Result<Short> res = errorOrValue(db.insert(shrt), s -> s.copyWithLikes_And_Token(0));
@@ -86,33 +86,33 @@ public class JavaShorts implements Shorts {
 		return shrt;
 	}
 
-
+	
 	@Override
 	public Result<Void> deleteShort(String shortId, String password) {
 		Log.info(() -> format("deleteShort : shortId = %s, pwd = %s\n", shortId, password));
-
+		
 		return errorOrResult( getShort(shortId), shrt ->
-				errorOrResult( okUser( shrt.getOwnerId(), password), user -> {
+			errorOrResult( okUser( shrt.getOwnerId(), password), user -> {
 
-							Result<Short> deleteShortResult = (Result<Short>) db.delete(shrt);
+				Result<Short> deleteShortResult = (Result<Short>) db.delete(shrt);
 
-							if (!deleteShortResult.isOK()) return Result.error(deleteShortResult.error());
+				if (!deleteShortResult.isOK()) return Result.error(deleteShortResult.error());
 
-							cache.delete(Short.class.getName() + "" + shortId);
+				cache.delete(Short.class.getName() + "" + shortId);
 
-							String deleteLikesQuery = format("SELECT * FROM Likes l WHERE l.shortId = '%s'", shortId);
+				String deleteLikesQuery = format("SELECT * FROM Likes l WHERE l.shortId = '%s'", shortId);
 
-							List<Likes> likesToDelete = db.sql(deleteLikesQuery, Likes.class).value();
+				List<Likes> likesToDelete = db.sql(deleteLikesQuery, Likes.class).value();
 
-							for (Likes like : likesToDelete) {
-								db.delete(like);
-							}
+				for (Likes like : likesToDelete) {
+					db.delete(like);
+				}
 
-							cache.delete("likes:" + shortId);
+				cache.delete("likes:" + shortId);
 
-							return JavaBlobs.getInstance().delete(shrt.getId(), Token.get(shrt.getBlobUrl()) );
-						}
-				));
+				return JavaBlobs.getInstance().delete(shrt.getId(), Token.get(shrt.getBlobUrl()) );
+			}
+		));
 	}
 
 	@Override
@@ -182,15 +182,15 @@ public class JavaShorts implements Shorts {
 		cache.insertList("feed:" + userId, feed.value());
 		return feed;
 	}
-
+		
 	protected Result<User> okUser( String userId, String pwd) {
 		return JavaUsers.getInstance().getUser(userId, pwd);
 	}
-
+	
 	@Override
 	public Result<Void> deleteAllShorts(String userId, String password) {
 		Log.info(() -> format("deleteAllShorts : userId = %s, password = %s\n", userId, password));
-
+						
 		try {
 			// Delete shorts owned by the user
 			String deleteShortsQuery = format("SELECT * FROM Short s WHERE s.ownerId = '%s'", userId);
@@ -222,5 +222,5 @@ public class JavaShorts implements Shorts {
 			return error(Result.ErrorCode.INTERNAL_ERROR);
 		}
 	}
-
+	
 }

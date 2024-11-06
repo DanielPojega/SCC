@@ -14,7 +14,7 @@ public class Likes {
 	String userId;
 
 	String shortId;
-
+	
 	public String getOwnerId() {
 		return ownerId;
 	}
@@ -24,7 +24,7 @@ public class Likes {
 	}
 
 	String ownerId;
-
+	
 	public Likes() {}
 
 	public Likes(String userId, String shortId, String ownerId) {
@@ -76,6 +76,6 @@ public class Likes {
 		return Objects.equals(ownerId, other.ownerId) && Objects.equals(shortId, other.shortId)
 				&& Objects.equals(userId, other.userId);
 	}
-
-
+	
+	
 }

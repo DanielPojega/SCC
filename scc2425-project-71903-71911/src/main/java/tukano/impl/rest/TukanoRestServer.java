@@ -26,7 +26,7 @@ public class TukanoRestServer extends Application {
 	public static final int PORT = 8080;
 
 	public static String serverURI;
-
+			
 	static {
 		System.setProperty("java.util.logging.SimpleFormatter.format", "%4$s: %5$s");
 	}
@@ -36,7 +36,7 @@ public class TukanoRestServer extends Application {
 
 	@Override
 	public Set<Object> getSingletons() {return singletons;}
-
+	
 	public TukanoRestServer() {
 		serverURI = String.format(SERVER_BASE_URI, IP.hostname(), PORT);
 		Token.setSecret(Args.valueOf("-secret", ""));
@@ -48,27 +48,27 @@ public class TukanoRestServer extends Application {
 	}
 
 	protected void start() throws Exception {
-
+	
 		ResourceConfig config = new ResourceConfig();
-
+		
 		config.register(RestBlobsResource.class);
-		config.register(RestUsersResource.class);
+		config.register(RestUsersResource.class); 
 		config.register(RestShortsResource.class);
 		config.register(RestFollowingResource.class);
 		config.register(RestLikesResource.class);
-
+		
 		JdkHttpServerFactory.createHttpServer( URI.create(serverURI.replace(IP.hostname(), INETADDR_ANY)), config);
-
+		
 		Log.info(String.format("Tukano Server ready @ %s\n",  serverURI));
 	}
-
-
+	
+	
 	public static void main(String[] args) throws Exception {
 		Args.use(args);
-
+		
 		Token.setSecret( Args.valueOf("-secret", ""));
 //		Props.load( Args.valueOf("-props", "").split(","));
-
+		
 		new TukanoRestServer().start();
 	}
 }

@@ -53,9 +53,9 @@ public class CosmosDBPostgreSQL {
             List<T> resultList = new ArrayList<>();
             try (PreparedStatement stmt = connection.prepareStatement(query);
                  ResultSet rs = stmt.executeQuery()) {
-                 while (rs.next()) {
+                while (rs.next()) {
                     resultList.add(clazz.getConstructor(ResultSet.class).newInstance(rs));
-                 }
+                }
             } catch (SQLException | ReflectiveOperationException e) {
                 throw new RuntimeException(e);
             }

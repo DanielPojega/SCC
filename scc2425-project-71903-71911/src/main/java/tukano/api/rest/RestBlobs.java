@@ -1,5 +1,6 @@
 package main.java.tukano.api.rest;
 
+
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;

@@ -5,16 +5,16 @@ import jakarta.persistence.Id;
 
 @Entity
 public class User {
-
+	
 	@Id
 	private String id;
 
 	private String pwd;
-	private String email;
+	private String email;	
 	private String displayName;
 
 	public User() {}
-
+	
 	public User(String id, String pwd, String email, String displayName) {
 		this.pwd = pwd;
 		this.email = email;
@@ -46,36 +46,36 @@ public class User {
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
-
+	
 	public String userId() {
 		return id;
 	}
-
+	
 	public String pwd() {
 		return pwd;
 	}
-
+	
 	public String email() {
 		return email;
 	}
-
+	
 	public String displayName() {
 		return displayName;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "User [userId=" + id + ", pwd=" + pwd + ", email=" + email + ", displayName=" + displayName + "]";
 	}
-
+	
 	public User copyWithoutPassword() {
 		return new User(id, "", email, displayName);
 	}
-
+	
 	public User updateFrom( User other ) {
 		return new User(id,
 				other.pwd != null ? other.pwd : pwd,
-				other.email != null ? other.email : email,
+				other.email != null ? other.email : email, 
 				other.displayName != null ? other.displayName : displayName);
 	}
 }

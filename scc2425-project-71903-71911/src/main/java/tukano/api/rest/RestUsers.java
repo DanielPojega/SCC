@@ -2,6 +2,7 @@ package main.java.tukano.api.rest;
 
 import java.util.List;
 
+import com.azure.core.annotation.Get;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -22,7 +23,7 @@ public interface RestUsers {
 	String PWD = "pwd";
 	String QUERY = "query";
 	String USER_ID = "userId";
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
