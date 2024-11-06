@@ -1,0 +1,30 @@
+#Will return 200 if short exists, if short doesn't exist will return 500.
+config:
+  target: "http://localhost:8080/tukano/rest"
+  phases:
+    - name: getShort
+      duration: 10
+      arrivalRate: 1
+
+scenarios:
+  - name: "register"
+    flow:
+      - post:
+          url: "/users"
+          json:
+            id: "25"
+            pwd: "123"
+            email: "user@gmail.com"
+            displayName: "UserXD"
+  #Must have a previous created short
+  - name: "createShort"
+    flow:
+      - post:
+          url: "/shorts/25?pwd=123"
+          capture:
+            - json: "$"
+              as: shortId
+  - name: "getShort"
+    flow:
+      - get:
+          url: "/shorts/{{shortId}}"

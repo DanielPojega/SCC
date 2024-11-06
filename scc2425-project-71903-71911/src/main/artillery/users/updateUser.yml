@@ -1,0 +1,43 @@
+#Will return 200 if user doesn't exist, if user exists will return 409. Check if user exists in the db
+
+config:
+  target: "http://localhost:8080/tukano/rest"
+  phases:
+    - name: postUser
+      duration: 1
+      arrivalRate: 1
+  payload:
+    path: ./user.csv
+    order: sequence
+    skipHeader: true # The first line is a header, so we want to skip it
+    delimiter: "," # standard delimiter
+    skipEmptyLines: true # not important in our case
+    fields:
+      - "id"
+      - "pwd"
+      - "email"
+      - "displayName"
+
+scenarios:
+  - name: "register"
+    flow:
+      - post:
+          url: "/users"
+          headers:
+            Content-Type: application/json
+          json:
+            id: "{{ id }}"
+            pwd: "{{ pwd }}"
+            email: "{{ email }}"
+            displayName: "{{ displayName }}"
+  - name: "update"
+    flow:
+      - put:
+          url: "/users/{{ id }}?pwd={{ pwd }}"
+          headers:
+            Content-Type: application/json
+          json:
+            id: "{{ id }}"
+            pwd: "{{ pwd }}"
+            email: "{{ email }}"
+            displayName: "Updated {{ displayName }}"

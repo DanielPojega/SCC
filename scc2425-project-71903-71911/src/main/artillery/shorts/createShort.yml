@@ -1,0 +1,24 @@
+#Will return 200 if short doesn't exist, if short exists will return 409. Check if short exists in the db
+
+config:
+  target:  "http://localhost:8080/tukano/rest"
+  phases:
+    - name: createShort
+      duration: 1
+      arrivalRate: 1
+
+scenarios:
+  #Create mock user to create short
+  - name: "register"
+    flow:
+      - post:
+          url: "/users"
+          json:
+            id: "20"
+            pwd: "123"
+            email: "user@mail"
+            displayName: "User123"
+  - name: "createShort"
+    flow:
+      - post:
+          url: "/shorts/20?pwd=123"

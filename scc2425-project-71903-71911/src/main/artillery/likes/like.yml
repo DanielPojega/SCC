@@ -1,0 +1,14 @@
+config:
+  target:  "http://localhost:8080/tukano/rest"
+  phases:
+    - name: like a short
+      duration: 3
+      arrivalRate: 1
+
+scenarios:
+  #Assuming short exists
+  - name: "like"
+    flow:
+      - post:
+          url: "/likes/5+99425014-9e60-47ad-940e-fda6d494ad64/5/likes?pwd=123"
+          json: true

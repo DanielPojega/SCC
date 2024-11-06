@@ -1,0 +1,23 @@
+config:
+  target: "http://localhost:8080/tukano/rest"
+  phases:
+    - name: deleteUser
+      duration: 5
+      arrivalRate: 1
+
+
+scenarios:
+  #Create mock user to delete
+  - name: "register"
+    flow:
+      - post:
+          url: "/users"
+          json:
+            id: "10"
+            pwd: "123"
+            email: "user@gmail.com"
+            displayName: "UserXD"
+  - name : "delete"
+    flow:
+      - delete:
+          url: "/users/10?pwd=123"

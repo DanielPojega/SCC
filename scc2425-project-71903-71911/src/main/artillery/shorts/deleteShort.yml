@@ -1,0 +1,30 @@
+config:
+  target: "http://localhost:8080/tukano/rest"
+  phases:
+    - name: deleteShort
+      duration: 5
+      arrivalRate: 1
+
+
+scenarios:
+  #Create mock short to delete
+  - name: "register"
+    flow:
+      - post:
+          url: "/users"
+          json:
+            id: "30"
+            pwd: "123"
+            email: "user@gmail.com"
+            displayName: "UserXD"
+  - name: "createShort"
+    flow:
+      - post:
+          url: "/shorts/30?pwd=123"
+          capture:
+            - json: "$"
+              as: shortId
+  - name : "delete"
+    flow:
+      - delete:
+          url: "/shorts/{{shortId}}?pwd=123"

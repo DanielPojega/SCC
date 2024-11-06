@@ -1,0 +1,39 @@
+config:
+  target: "http://localhost:8080/tukano/rest"
+  phases:
+    - name: getFeed
+      duration: 7
+      arrivalRate: 1
+
+scenarios:
+  - name: "register"
+    flow:
+      - post:
+          url: "/users"
+          json:
+            id: "26"
+            pwd: "123"
+            email: "user@gmail.com"
+            displayName: "UserXD"
+  - name: "register"
+    flow:
+      - post:
+          url: "/users"
+          json:
+            id: "27"
+            pwd: "1234"
+            email: "user2@gmail.com"
+            displayName: "User2XD"
+  #Must have previous created shorts
+  - name: "createShort"
+    flow:
+      - post:
+          url: "/shorts/26?pwd=123"
+  - name: "createShort"
+    flow:
+      - post:
+          url: "/shorts/27?pwd=1234"
+  - name: "getShort"
+    flow:
+      - get:
+          url: "/shorts/26/feed?pwd=123"

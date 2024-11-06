@@ -1,0 +1,31 @@
+config:
+  target: "http://localhost:8080/tukano/rest"
+  phases:
+    - name: follow a user
+      duration: 5
+      arrivalRate: 1
+
+scenarios:
+  - name: "register"
+    flow:
+      - post:
+          url: "/users"
+          json:
+            id: "12"
+            pwd: "123"
+            email: "user123@gmail.com"
+            displayName: "UserXDD"
+  - name: "register"
+    flow:
+      - post:
+          url: "/users"
+          json:
+            id: "13"
+            pwd: "123"
+            email: "user456@gmail.com"
+            displayName: "UserXXD"
+  - name: "follow"
+    flow:
+      - post:
+          url: "/following/12/13/followers?pwd=123"
+          json: true

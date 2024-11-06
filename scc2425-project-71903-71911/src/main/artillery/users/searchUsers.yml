@@ -1,0 +1,13 @@
+config:
+  target: "http://localhost:8080/tukano/rest"
+  phases:
+    - name: searchUser
+      duration: 5
+      arrivalRate: 3
+
+scenarios:
+  - name : search users
+    flow:
+      #searchUser
+      - get:
+          url: "/users/?query=1"

@@ -1,0 +1,12 @@
+config:
+  target: "http://localhost:8080/tukano/rest"
+  phases:
+    - name: get likes
+      duration: 6
+      arrivalRate: 2
+
+scenarios:
+  - name: "get likes"
+    flow:
+      - get:
+          url: "/likes/5+99425014-9e60-47ad-940e-fda6d494ad64/likes?pwd=123"

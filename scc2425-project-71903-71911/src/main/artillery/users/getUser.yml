@@ -1,0 +1,23 @@
+config:
+  target: "http://localhost:8080/tukano/rest"
+  phases:
+    - name: getUser
+      duration: 1
+      arrivalRate: 3
+
+scenarios:
+  #Create mock user to get
+  - name: "register"
+    flow:
+      - post:
+          url: "/users"
+          json:
+            id: "10"
+            pwd: "123"
+            email: "user@gmail.com"
+            displayName: "UserXD"
+  - name : "get"
+    flow:
+      # getUser
+      - get:
+          url: "/users/10?pwd=123"
