@@ -12,18 +12,20 @@ public class RestBlobsClient extends RestClient implements Blobs {
 		super(serverURI, RestBlobs.PATH);
 	}
 
-	private Result<Void> _upload(String blobURL, byte[] bytes, String token) {
+	private Result<Void> _upload(String blobURL, byte[] bytes, String token, String userId) {
 		return super.toJavaResult(
 				client.target( blobURL )
 				.queryParam(RestBlobs.TOKEN, token)
+						.queryParam(RestBlobs.USER_ID, userId)
 				.request()
 				.post( Entity.entity(bytes, MediaType.APPLICATION_OCTET_STREAM_TYPE)));
 	}
 
-	private Result<byte[]> _download(String blobURL, String token) {
+	private Result<byte[]> _download(String blobURL, String token, String userId) {
 		return super.toJavaResult(
 				client.target( blobURL )
 				.queryParam(RestBlobs.TOKEN, token)
+						.queryParam(RestBlobs.USER_ID, userId)
 				.request()
 				.accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
 				.get(), byte[].class);
@@ -47,13 +49,13 @@ public class RestBlobsClient extends RestClient implements Blobs {
 	}
 	
 	@Override
-	public Result<Void> upload(String blobId, byte[] bytes, String token) {
-		return super.reTry( () -> _upload(blobId, bytes, token));
+	public Result<Void> upload(String blobId, byte[] bytes, String token, String userId) {
+		return super.reTry( () -> _upload(blobId, bytes, token, userId));
 	}
 
 	@Override
-	public Result<byte[]> download(String blobId, String token) {
-		return super.reTry( () -> _download(blobId, token));
+	public Result<byte[]> download(String blobId, String token, String userId) {
+		return super.reTry( () -> _download(blobId, token, userId));
 	}
 
 	@Override

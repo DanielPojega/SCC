@@ -15,13 +15,13 @@ public class RestBlobsResource extends main.java.tukano.impl.rest.RestResource i
 	}
 	
 	@Override
-	public void upload(String blobId, byte[] bytes, String token) {
-		super.resultOrThrow( impl.upload(blobId, bytes, token));
+	public void upload(String blobId, byte[] bytes, String token, String userId) {
+		super.resultOrThrow( impl.upload(blobId, bytes, token, userId));
 	}
 
 	@Override
-	public byte[] download(String blobId, String token) {
-		return super.resultOrThrow( impl.download( blobId, token ));
+	public byte[] download(String blobId, String token, String userId) {
+		return super.resultOrThrow( impl.download( blobId, token, userId ));
 	}
 
 	@Override

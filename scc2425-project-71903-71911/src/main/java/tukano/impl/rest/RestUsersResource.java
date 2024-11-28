@@ -3,6 +3,7 @@ package main.java.tukano.impl.rest;
 import java.util.List;
 
 import jakarta.inject.Singleton;
+import jakarta.ws.rs.core.Response;
 import main.java.tukano.api.User;
 import main.java.tukano.api.Users;
 import main.java.tukano.api.rest.RestUsers;
@@ -17,7 +18,7 @@ public class RestUsersResource extends RestResource implements RestUsers {
 	}
 	
 	@Override
-	public String createUser(User user) {
+	public Response createUser(User user) {
 		return super.resultOrThrow( impl.createUser( user));
 	}
 

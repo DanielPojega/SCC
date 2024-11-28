@@ -21,7 +21,7 @@ public interface Blobs {
 	 *         CONFLICT if a blobId exists but bytes do not match;
 	 *         FORBIDDEN if the blobId is not valid
 	 */
-	Result<Void> upload(String blobId, byte[] bytes, String token);
+	Result<Void> upload(String blobId, byte[] bytes, String token, String userId);
 
 	/**
 	 * Downloads a short video blob resource in a single byte chunk of bytes.
@@ -30,7 +30,7 @@ public interface Blobs {
 	 * @return (OK, bytes), if the blob exists;
 	 * 			 NOT_FOUND, if no blob matches the provided blobId
 	 */
-	Result<byte[]> download(String blobId, String token);
+	Result<byte[]> download(String blobId, String token, String userId);
 
 	/**
 	 * Downloads a short video blob resource as a result suitable for streaming
@@ -43,8 +43,8 @@ public interface Blobs {
 	 * @return (OK,), if the blob exists;
 	 *		   NOT_FOUND, if no blob matches the provided blobId
 	 */
-	default Result<Void> downloadToSink(String blobId, Consumer<byte[]> sink, String token) {
-		var res = download(blobId, token);
+	default Result<Void> downloadToSink(String blobId, Consumer<byte[]> sink, String token, String userId) {
+		var res = download(blobId, token, userId);
 		if (!res.isOK())
 			return Result.error(res.error());
 

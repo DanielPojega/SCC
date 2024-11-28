@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
+import jakarta.ws.rs.core.NewCookie;
+import jakarta.ws.rs.core.Response;
 import main.java.tukano.api.Result;
 import main.java.tukano.api.User;
 import main.java.tukano.api.Users;
@@ -24,6 +26,10 @@ public class JavaUsers implements Users {
 	private static Logger Log = Logger.getLogger(JavaUsers.class.getName());
 
 	private final CosmosDB db = CosmosDB.getInstance("users");
+
+	int MAX_COOKIE_AGE = 3600;
+	static final String COOKIE_KEY = "scc:session";
+
 
 	private final RedisCache cache = new RedisCache();
 
@@ -38,13 +44,30 @@ public class JavaUsers implements Users {
 	private JavaUsers() {}
 	
 	@Override
-	public Result<String> createUser(User user) {
+	public Result<Response> createUser(User user) {
 		Log.info(() -> format("createUser : %s\n", user));
 
 		if( badUserInfo( user ) )
 				return error(BAD_REQUEST);
 
-		return errorOrValue( db.insert(user), user.getId() );
+		var dbResult = db.insert(user);
+		if (!dbResult.isOK()) {
+			return Result.error(dbResult.error());
+		}
+
+		var cookie = new NewCookie.Builder(COOKIE_KEY)
+				.value(user.getId()).path("/")
+				.comment("sessionid")
+				.maxAge(MAX_COOKIE_AGE)
+				.secure(false) //ideally it should be true to only work for https requests
+				.httpOnly(true)
+				.build();
+
+		cache.insert( user.getId(), user );
+
+		return ok(Response.ok("User created successfully")
+				.cookie(cookie)
+				.build());
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import main.java.tukano.impl.storage.AzureBlobStorage;
 import main.java.tukano.impl.storage.BlobStorage;
 import main.java.utils.Hash;
 import main.java.utils.Hex;
+import main.java.utils.auth.SessionValidation;
 
 public class JavaBlobs implements Blobs {
 	
@@ -22,6 +23,8 @@ public class JavaBlobs implements Blobs {
 
 	public String baseURI;
 	private BlobStorage storage;
+
+	private static final String ADMIN = "admin";
 	
 	synchronized public static Blobs getInstance() {
 		if( instance == null )
@@ -35,8 +38,10 @@ public class JavaBlobs implements Blobs {
 	}
 	
 	@Override
-	public Result<Void> upload(String blobId, byte[] bytes, String token) {
+	public Result<Void> upload(String blobId, byte[] bytes, String token, String userId) {
 		Log.info(() -> format("upload : blobId = %s, sha256 = %s, token = %s\n", blobId, Hex.of(Hash.sha256(bytes)), token));
+
+		SessionValidation.validateSession(userId);
 
 		if (!validBlobId(blobId, token))
 			return error(FORBIDDEN);
@@ -45,8 +50,10 @@ public class JavaBlobs implements Blobs {
 	}
 
 	@Override
-	public Result<byte[]> download(String blobId, String token) {
+	public Result<byte[]> download(String blobId, String token, String userId) {
 		Log.info(() -> format("download : blobId = %s, token=%s\n", blobId, token));
+
+		SessionValidation.validateSession(userId);
 
 		if( ! validBlobId( blobId, token ) )
 			return error(FORBIDDEN);
@@ -55,8 +62,10 @@ public class JavaBlobs implements Blobs {
 	}
 
 	@Override
-	public Result<Void> downloadToSink(String blobId, Consumer<byte[]> sink, String token) {
+	public Result<Void> downloadToSink(String blobId, Consumer<byte[]> sink, String token, String userId) {
 		Log.info(() -> format("downloadToSink : blobId = %s, token = %s\n", blobId, token));
+
+		SessionValidation.validateSession(userId);
 
 		if( ! validBlobId( blobId, token ) )
 			return error(FORBIDDEN);
@@ -67,6 +76,8 @@ public class JavaBlobs implements Blobs {
 	@Override
 	public Result<Void> delete(String blobId, String token) {
 		Log.info(() -> format("delete : blobId = %s, token=%s\n", blobId, token));
+
+		SessionValidation.validateSession(ADMIN);
 	
 		if( ! validBlobId( blobId, token ) )
 			return error(FORBIDDEN);
@@ -77,6 +88,8 @@ public class JavaBlobs implements Blobs {
 	@Override
 	public Result<Void> deleteAllBlobs(String userId, String token) {
 		Log.info(() -> format("deleteAllBlobs : userId = %s, token=%s\n", userId, token));
+
+		SessionValidation.validateSession(ADMIN);
 
 		if( ! main.java.tukano.impl.Token.isValid( token, userId ) )
 			return error(FORBIDDEN);

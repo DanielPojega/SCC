@@ -62,7 +62,7 @@ public class Test {
 		
 		var token = blobUrl.getQuery().split("=")[1];
 		
-		blobs.upload(blobUrl.toString(), randomBytes( 100 ), token);
+		blobs.upload(blobUrl.toString(), randomBytes( 100 ), token, "1");
 
 		
 		var s2id = s2.value().getId();

@@ -13,6 +13,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import main.java.tukano.api.User;
 
 @Path(RestUsers.PATH)
@@ -27,7 +28,7 @@ public interface RestUsers {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	String createUser(User user);
+	Response createUser(User user);
 	
 	
 	@GET

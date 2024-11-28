@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import main.java.tukano.api.Result;
 import main.java.tukano.api.User;
 import main.java.tukano.api.Users;
@@ -17,11 +18,11 @@ public class RestUsersClient extends RestClient implements Users {
 		super( serverURI, RestUsers.PATH );
 	}
 		
-	private Result<String> _createUser(User user) {
+	private Result<Response> _createUser(User user) {
 		return super.toJavaResult( 
 			target.request()
 			.accept(MediaType.APPLICATION_JSON)
-			.post(Entity.entity(user, MediaType.APPLICATION_JSON)), String.class );
+			.post(Entity.entity(user, MediaType.APPLICATION_JSON)), Response.class );
 	}
 
 	private Result<User> _getUser(String userId, String pwd) {
@@ -62,7 +63,7 @@ public class RestUsersClient extends RestClient implements Users {
 	}
 
 	@Override
-	public Result<String> createUser(User user) {
+	public Result<Response> createUser(User user) {
 		return super.reTry( () -> _createUser(user));
 	}
 

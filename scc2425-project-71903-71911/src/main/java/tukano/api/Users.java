@@ -1,5 +1,7 @@
 package main.java.tukano.api;
 
+import jakarta.ws.rs.core.Response;
+
 import java.util.List;
 
 public interface Users {
@@ -13,7 +15,7 @@ public interface Users {
 	 * 		CONFLICT - if the name already exists. 
 	 * 		BAD_REQUEST - otherwise.
 	 */
-	Result<String> createUser(User user);
+	Result<Response> createUser(User user);
 	
 	/**
 	 * Obtains the information on the user identified by userId

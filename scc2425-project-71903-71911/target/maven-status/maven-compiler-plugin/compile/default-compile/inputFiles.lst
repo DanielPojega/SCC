@@ -3,6 +3,7 @@ C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\ma
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\impl\rest\RestShortsResource.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\impl\data\ShortIdResult.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\api\Shorts.java
+C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\utils\auth\SessionValidation.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\utils\TryCatch.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\impl\rest\RestBlobsResource.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\utils\db\CosmosDB.java
@@ -29,6 +30,7 @@ C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\ma
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\utils\IO.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\utils\Props.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\impl\JavaUsers.java
+C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\utils\auth\RequestCookiesCleanupFilter.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\api\Short.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\impl\JavaLikes.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\test\tukano\clients\rest\RestBlobsClient.java
@@ -39,11 +41,13 @@ C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\ma
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\utils\Random.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\utils\RedisCache.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\api\rest\RestLikes.java
+C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\utils\auth\RequestCookies.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\api\Users.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\test\test\Test.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\impl\rest\RestUsersResource.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\utils\TLS.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\impl\Token.java
+C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\utils\auth\RequestCookiesFilter.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\impl\rest\TukanoRestServer.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\api\rest\RestShorts.java
 C:\Users\danie\Desktop\FCT\1sem\SCC\1proj\SCC\scc2425-project-71903-71911\src\main\java\tukano\api\User.java

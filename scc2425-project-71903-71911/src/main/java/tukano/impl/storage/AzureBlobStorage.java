@@ -17,8 +17,8 @@ import static main.java.tukano.api.Result.ok;
 public class AzureBlobStorage implements BlobStorage {
 
     private static final String BLOBS_CONTAINER_NAME = "blobs";
-    private static final String storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=scc71911;AccountKey=Brh3NBldgkkN7wWaJ72dHOkowZMkUqrcSM8+ecTKjgXyE2FZJVn3amdBslgrkldrsY2yQl5xSqo5+AStoCtWyw==;EndpointSuffix=core.windows.net";
-    BlobContainerClient containerClient = new BlobContainerClientBuilder()
+    private static final String storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=scc2425;AccountKey=Z6sMHU+hQAjclTRHJ/rzjRtzPZc54XscJkNAc30+SbXkK7FWc7kzKJvX5luP792Tw1S9g77mxTFx+ASt6WQqJw==;EndpointSuffix=core.windows.net";
+            BlobContainerClient containerClient = new BlobContainerClientBuilder()
             .connectionString(storageConnectionString)
             .containerName(BLOBS_CONTAINER_NAME)
             .buildClient();

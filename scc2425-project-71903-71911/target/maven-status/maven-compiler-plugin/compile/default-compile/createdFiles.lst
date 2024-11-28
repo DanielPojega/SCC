@@ -8,9 +8,11 @@ main\java\tukano\impl\rest\RestFollowingResource.class
 main\java\utils\db\CosmosDBPostgreSQL.class
 main\test\tukano\clients\rest\RestShortsClient$1.class
 main\java\tukano\api\OkResult.class
+main\java\utils\auth\RequestCookiesFilter.class
 main\java\tukano\api\Result.class
 main\java\tukano\impl\rest\RestLikesResource.class
 main\java\tukano\api\Short.class
+main\java\utils\auth\SessionValidation.class
 main\java\tukano\impl\storage\BlobStorage.class
 main\java\utils\Random.class
 main\java\tukano\impl\rest\utils\GenericExceptionMapper.class
@@ -31,6 +33,7 @@ main\test\tukano\clients\rest\RestShortsClient$4.class
 main\java\tukano\api\rest\RestBlobs.class
 main\java\tukano\impl\rest\RestUsersResource.class
 main\java\tukano\impl\storage\AzureBlobStorage.class
+main\java\utils\auth\RequestCookiesCleanupFilter.class
 main\java\tukano\impl\data\Following.class
 main\java\utils\DB.class
 main\java\tukano\api\User.class
@@ -63,3 +66,4 @@ main\java\utils\Sleep.class
 main\test\tukano\clients\rest\RestShortsClient.class
 main\java\tukano\impl\JavaShorts.class
 main\java\tukano\impl\rest\RestResource.class
+main\java\utils\auth\RequestCookies.class

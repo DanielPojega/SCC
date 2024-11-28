@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 public class CosmosDB {
 
     private static final String CONNECTION_URL = "https://scc71911.documents.azure.com:443/";
-    private static final String DB_KEY = "28TNOlRmlWcJ6sPjfwfPxLGQJm9INT2dgAO87VnZqkw0umH3LO5bt1aeorRCuIEIHk4TMe7u6glpACDbEZ7vpQ==";
+    private static final String DB_KEY = "M3pEqu8ma1AlGQZX4iLCi98Rxw8OjYzUEEk4Gn3ScWNZe52rS3rv5gq7FwGOA1Y5OL644zqVutgrACDbXxp3YQ==";
     private static final String DB_NAME = "scc2425";
 
     private CosmosClient client;

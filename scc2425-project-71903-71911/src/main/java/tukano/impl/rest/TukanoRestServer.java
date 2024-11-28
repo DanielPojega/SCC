@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import jakarta.ws.rs.core.Application;
+import main.java.utils.auth.RequestCookiesFilter;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -45,6 +46,8 @@ public class TukanoRestServer extends Application {
 		resources.add(RestShortsResource.class);
 		resources.add(RestFollowingResource.class);
 		resources.add(RestLikesResource.class);
+		resources.add(RequestCookiesFilter.class);
+
 	}
 
 	protected void start() throws Exception {
@@ -56,6 +59,7 @@ public class TukanoRestServer extends Application {
 		config.register(RestShortsResource.class);
 		config.register(RestFollowingResource.class);
 		config.register(RestLikesResource.class);
+		config.register(RequestCookiesFilter.class);
 		
 		JdkHttpServerFactory.createHttpServer( URI.create(serverURI.replace(IP.hostname(), INETADDR_ANY)), config);
 		
