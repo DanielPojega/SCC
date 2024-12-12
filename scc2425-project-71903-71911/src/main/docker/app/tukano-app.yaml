@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tukano-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tukano-app
+  template:
+    metadata:
+      labels:
+        app: tukano-app
+    spec:
+      volumes:
+        - name: media-storage
+          persistentVolumeClaim:
+            claimName: media-storage-pvc
+      containers:
+        - name: tukano-sv-container
+          image: a49521/tukano-sv:v1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_URL
+              value: "http://mongodb:27017/"
+          volumeMounts:
+            - name: media-storage
+              mountPath: "/app/media"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tukano-service
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  selector:
+    app: tukano-app

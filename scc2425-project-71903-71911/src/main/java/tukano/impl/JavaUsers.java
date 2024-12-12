@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
+import com.mongodb.client.model.Filters;
 import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
 import main.java.tukano.api.Result;
@@ -20,12 +21,15 @@ import main.java.tukano.api.Users;
 import main.java.utils.JSON;
 import main.java.utils.RedisCache;
 import main.java.utils.db.CosmosDB;
+import main.java.utils.db.MongoDB;
+import org.bson.conversions.Bson;
 
 public class JavaUsers implements Users {
 	
 	private static Logger Log = Logger.getLogger(JavaUsers.class.getName());
 
-	private final CosmosDB db = CosmosDB.getInstance("users");
+	//private final CosmosDB db = CosmosDB.getInstance("users");
+	private final MongoDB db = new MongoDB("users");
 
 	int MAX_COOKIE_AGE = 3600;
 	static final String COOKIE_KEY = "scc:session";
@@ -102,7 +106,7 @@ public class JavaUsers implements Users {
 				validatedUserOrError(db.get( userId, User.class), pwd),
 				user -> {
 					User updatedUser = user.updateFrom(other);
-					Result<User> dbUpdateResult = db.update(updatedUser);
+					Result<User> dbUpdateResult = db.update(updatedUser.getId(), updatedUser);
 					if (dbUpdateResult.isOK()) {
 						String key = User.class.getName() + "" + userId;
 						cache.insert(key, updatedUser);
@@ -119,6 +123,9 @@ public class JavaUsers implements Users {
 		if (userId == null || pwd == null )
 			return error(BAD_REQUEST);
 
+		System.out.println("HERE");
+		System.out.println(db.get( userId, User.class).value());
+
 		return errorOrResult( validatedUserOrError(db.get( userId, User.class), pwd), user -> {
 
 			// Delete user shorts and related info asynchronously in a separate thread
@@ -126,7 +133,7 @@ public class JavaUsers implements Users {
 				JavaShorts.getInstance().deleteAllShorts(userId, pwd);
 				JavaBlobs.getInstance().deleteAllBlobs(userId, Token.get(userId));
 			}).start();
-			Result<User> deleteResult = (Result<User>) db.delete(user);
+			Result<User> deleteResult = (Result<User>) db.delete(user.getId());
 			if (deleteResult.isOK()) {
 				String key = User.class.getName() + "" + userId;
 				cache.delete(key);
@@ -149,7 +156,8 @@ public class JavaUsers implements Users {
 			).toList());
 		}
 
-		var query = format("SELECT * FROM User u WHERE UPPER(u.id) LIKE '%%%s%%'", pattern.toUpperCase());
+		//var query = format("SELECT * FROM User u WHERE UPPER(u.id) LIKE '%%%s%%'", pattern.toUpperCase());
+		Bson query = Filters.regex("id", ".*" + pattern.toUpperCase() + ".*", "i");
 		var hits = db.sql(query, User.class)
 				.value()
 				.stream()
@@ -164,7 +172,7 @@ public class JavaUsers implements Users {
 
 	
 	private Result<User> validatedUserOrError( Result<User> res, String pwd ) {
-		if( res.isOK())
+		if( res.isOK() && res.value() != null )
 			return res.value().getPwd().equals( pwd ) ? res : error(FORBIDDEN);
 		else
 			return res;

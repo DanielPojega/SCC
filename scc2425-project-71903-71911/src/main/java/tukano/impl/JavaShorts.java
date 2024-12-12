@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import com.mongodb.client.model.Filters;
 import main.java.tukano.api.Blobs;
 import main.java.tukano.api.Result;
 import main.java.tukano.api.Short;
@@ -23,12 +24,15 @@ import main.java.tukano.impl.data.ShortIdResult;
 import main.java.tukano.impl.rest.TukanoRestServer;
 import main.java.utils.RedisCache;
 import main.java.utils.db.CosmosDB;
+import main.java.utils.db.MongoDB;
+import org.bson.conversions.Bson;
 
 public class JavaShorts implements Shorts {
 
 	private static Logger Log = Logger.getLogger(JavaShorts.class.getName());
 
-	private final CosmosDB db = CosmosDB.getInstance("shorts");
+	//private final CosmosDB db = CosmosDB.getInstance("shorts");
+	private final MongoDB db = new MongoDB("shorts");
 
 	private final RedisCache cache = new RedisCache();
 	
@@ -76,11 +80,13 @@ public class JavaShorts implements Shorts {
 			return cachedShort;
 		}
 
-		var query = format("SELECT * FROM Likes l WHERE l.shortId = '%s'", shortId);
+		//var query = format("SELECT * FROM Likes l WHERE l.shortId = '%s'", shortId);
+		Bson query = Filters.eq("shortId", shortId);
 
 		var likes = db.sql(query, Likes.class);
 
-		Result<Short> shrt = errorOrValue( db.get(shortId, Short.class), shr -> shr.copyWithLikes_And_Token( likes.value().size()));
+		Result<Short> shrt = errorOrValue( db.get(shortId, Short.class), shr ->
+				shr == null ? null : shr.copyWithLikes_And_Token( likes.value().size()));
 		cache.insert(key, shrt.value());
 
 		return shrt;
@@ -94,18 +100,19 @@ public class JavaShorts implements Shorts {
 		return errorOrResult( getShort(shortId), shrt ->
 			errorOrResult( okUser( shrt.getOwnerId(), password), user -> {
 
-				Result<Short> deleteShortResult = (Result<Short>) db.delete(shrt);
+				Result<Short> deleteShortResult = (Result<Short>) db.delete(shrt.getId());
 
 				if (!deleteShortResult.isOK()) return Result.error(deleteShortResult.error());
 
 				cache.delete(Short.class.getName() + "" + shortId);
 
-				String deleteLikesQuery = format("SELECT * FROM Likes l WHERE l.shortId = '%s'", shortId);
+				//String deleteLikesQuery = format("SELECT * FROM Likes l WHERE l.shortId = '%s'", shortId);
+				Bson deleteLikesQuery = Filters.eq("shortId", shortId);
 
 				List<Likes> likesToDelete = db.sql(deleteLikesQuery, Likes.class).value();
 
 				for (Likes like : likesToDelete) {
-					db.delete(like);
+					db.delete(like.getId());
 				}
 
 				cache.delete("likes:" + shortId);
@@ -126,7 +133,9 @@ public class JavaShorts implements Shorts {
 			return ok(cachedList.value());
 		}
 
-		var query = format("SELECT s.id FROM Short s WHERE s.ownerId = '%s'", userId);
+		//var query = format("SELECT s.id FROM Short s WHERE s.ownerId = '%s'", userId);
+		Bson query = Filters.eq("ownerId", userId);
+
 		Result<List<ShortIdResult>> results = db.sql(query, ShortIdResult.class);
 		if (results.error() != OK) {
 			return error(results.error());
@@ -150,7 +159,9 @@ public class JavaShorts implements Shorts {
 			return ok(cachedList.value());
 		}
 
-		String queryShorts = String.format("SELECT s.id, s.timestamp FROM Short s WHERE s.ownerId = '%s'", userId);
+		//String queryShorts = String.format("SELECT s.id, s.timestamp FROM Short s WHERE s.ownerId = '%s'", userId);
+		Bson queryShorts = Filters.eq("ownerId", userId);
+
 		Result<List<Short>> ownerShorts = db.sql(queryShorts, Short.class);
 
 		String queryFollowing = String.format("SELECT f.followee FROM Following f WHERE f.follower = '%s'", userId);
@@ -160,11 +171,12 @@ public class JavaShorts implements Shorts {
 
 		if (!followees.isEmpty()) {
 			String followeeIds = String.join(",", followees);
-			String queryFolloweeShorts = String.format(
+			/*String queryFolloweeShorts = String.format(
 					"SELECT s.id, s.timestamp FROM Short s WHERE s.ownerId IN ('%s')", followeeIds
-			);
+			);*/
+			Bson queryFolloweeShorts = Filters.in("ownerId", followeeIds);
+
 			Result<List<Short>> followeeShorts = db.sql(queryFolloweeShorts, Short.class);
-			System.out.println(followeeShorts);
 
 			if (ownerShorts.isOK() && followeeShorts.isOK()) {
 				shortsIds.addAll(ownerShorts.value().stream()
@@ -193,27 +205,33 @@ public class JavaShorts implements Shorts {
 						
 		try {
 			// Delete shorts owned by the user
-			String deleteShortsQuery = format("SELECT * FROM Short s WHERE s.ownerId = '%s'", userId);
+			//String deleteShortsQuery = format("SELECT * FROM Short s WHERE s.ownerId = '%s'", userId);
+			Bson deleteShortsQuery = Filters.eq("ownerId", userId);
+
 			List<Short> shortsToDelete = db.sql(deleteShortsQuery, Short.class).value();
 			for (Short shortItem : shortsToDelete) {
-				db.delete(shortItem);
+				db.delete(shortItem.getId());
 				cache.delete(Short.class.getName() + "" + shortItem.getId());
 			}
 			cache.delete("shorts:" + userId);
 
 			// Delete follows where user is either follower or followee
-			String deleteFollowsQuery = format("SELECT * FROM Following f WHERE f.follower = '%s' OR f.followee = '%s'", userId, userId);
+			//String deleteFollowsQuery = format("SELECT * FROM Following f WHERE f.follower = '%s' OR f.followee = '%s'", userId, userId);
+			Bson deleteFollowsQuery = Filters.or(Filters.eq("follower", userId), Filters.eq("followee", userId));
+
 			List<Following> followsToDelete = db.sql(deleteFollowsQuery, Following.class).value();
 			for (Following follow : followsToDelete) {
-				db.delete(follow);
+				db.delete(follow.getId());
 			}
 			cache.delete("followers:" + userId);
 
 			// Delete likes where user is either owner or user
-			String deleteLikesQuery = format("SELECT * FROM Likes l WHERE l.ownerId = '%s' OR l.userId = '%s'", userId, userId);
+			//String deleteLikesQuery = format("SELECT * FROM Likes l WHERE l.ownerId = '%s' OR l.userId = '%s'", userId, userId);
+			Bson deleteLikesQuery = Filters.or(Filters.eq("ownerId", userId), Filters.eq("userId", userId));
+
 			List<Likes> likesToDelete = db.sql(deleteLikesQuery, Likes.class).value();
 			for (Likes like : likesToDelete) {
-				db.delete(like);
+				db.delete(like.getId());
 				cache.delete("likes:" + like.getShortId());
 			}
 

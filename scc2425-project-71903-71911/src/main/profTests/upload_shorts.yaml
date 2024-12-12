@@ -1,5 +1,5 @@
 config:
-  target: http://127.0.0.1:8080/tukano/rest
+  target: http://135.236.194.136:80/tukano/rest
   plugins:
     metrics-by-endpoint: {} # Used to get metrics for each endpoint individually.
   processor: ./test-utils.js
@@ -11,6 +11,19 @@ config:
   #- name: "Main test"    # MAIN TESTS: duration: 30s, with 10 new clients/sec. Should be varied depending on scenario.
     #duration: 30
     #arrivalRate: 10
+  payload:
+    path: ./data/users.csv
+    order: sequence # selects users sequentially, default is random
+    #loadAll: true # load the whole CSV
+    skipHeader: true # The first line is a header, so we want to skip it
+    delimiter: "," # standard delimiter
+    skipEmptyLines: true # not important in our case
+    fields:
+      - "id"
+      - "email"
+      - "pwd"
+      - "displayName"
+
 scenarios:
   - name: 'Upload short'
     weight: 10
@@ -20,7 +33,16 @@ scenarios:
           url: "/shorts/{{ id }}?pwd={{ pwd }}"
           afterResponse: "processVideoAddReply"
       - post:
+          url: /users/
+          headers:
+            Content-Type: application/json
+          json:
+            id: "1" # To simplify the test, we will use the same user id for all shorts
+            pwd: "{{ pwd }}"
+            email: "{{ email }}"
+            displayName: "{{ displayName }}"
+      - post:
           beforeRequest: "uploadBlobBody"
-          url: "/blobs/{{ blobUrl }}"
+          url: "/blobs/{{ blobUrl }}?userId=1"
             
 

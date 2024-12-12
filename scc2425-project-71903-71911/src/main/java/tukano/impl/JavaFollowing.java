@@ -1,11 +1,14 @@
 package main.java.tukano.impl;
 
+import com.mongodb.client.model.Filters;
 import main.java.tukano.api.FollowingI;
 import main.java.tukano.api.Result;
 import main.java.tukano.api.User;
 import main.java.tukano.impl.data.Following;
 import main.java.utils.RedisCache;
 import main.java.utils.db.CosmosDB;
+import main.java.utils.db.MongoDB;
+import org.bson.conversions.Bson;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -20,7 +23,8 @@ public class JavaFollowing implements FollowingI {
 
     private static Logger Log = Logger.getLogger(JavaFollowing.class.getName());
 
-    private final CosmosDB db = CosmosDB.getInstance("following");
+   // private final CosmosDB db = CosmosDB.getInstance("following");
+   private final MongoDB db = new MongoDB("following");
 
     private final RedisCache cache = new RedisCache();
 
@@ -40,7 +44,7 @@ public class JavaFollowing implements FollowingI {
 
         return errorOrResult( okUser(userId1, password), user -> {
             var f = new Following(userId1, userId2);
-            Result<Void> res = errorOrVoid( okUser( userId2), isFollowing ? db.insert( f ) : db.delete( f ));
+            Result<Void> res = errorOrVoid( okUser( userId2), isFollowing ? db.insert( f ) : db.delete( f.getId() ));
             if (res.isOK()) {
                 if (isFollowing) {
                     cache.delete("followers:" + userId2);
@@ -61,7 +65,9 @@ public class JavaFollowing implements FollowingI {
             return ok(cachedList.value());
         }
 
-        var query = format("SELECT f.follower FROM Following f WHERE f.followee = '%s'", userId);
+        //var query = format("SELECT f.follower FROM Following f WHERE f.followee = '%s'", userId);
+        Bson query = Filters.eq("followee", userId);
+
         Result<List<Following>> results =
                 errorOrValue( okUser(userId, password), db.sql(query, Following.class));
 

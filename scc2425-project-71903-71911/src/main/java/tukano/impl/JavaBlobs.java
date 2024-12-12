@@ -12,6 +12,7 @@ import main.java.tukano.api.Result;
 import main.java.tukano.impl.rest.TukanoRestServer;
 import main.java.tukano.impl.storage.AzureBlobStorage;
 import main.java.tukano.impl.storage.BlobStorage;
+import main.java.tukano.impl.storage.FilesystemStorage;
 import main.java.utils.Hash;
 import main.java.utils.Hex;
 import main.java.utils.auth.SessionValidation;
@@ -33,7 +34,7 @@ public class JavaBlobs implements Blobs {
 	}
 	
 	private JavaBlobs() {
-		storage = new AzureBlobStorage();
+		storage = new FilesystemStorage();
 		baseURI = String.format("%s/%s/", TukanoRestServer.serverURI, Blobs.NAME);
 	}
 	
@@ -43,10 +44,10 @@ public class JavaBlobs implements Blobs {
 
 		SessionValidation.validateSession(userId);
 
-		if (!validBlobId(blobId, token))
+		if (!validBlobId(blobId, Token.get(toURL(blobId))))
 			return error(FORBIDDEN);
 
-		return storage.write(bytes);
+		return storage.write(toPath( blobId ), bytes);
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class JavaBlobs implements Blobs {
 
 		SessionValidation.validateSession(userId);
 
-		if( ! validBlobId( blobId, token ) )
+		if( ! validBlobId( blobId,  Token.get(toURL(blobId))))
 			return error(FORBIDDEN);
 
 		return storage.read( toPath( blobId ) );

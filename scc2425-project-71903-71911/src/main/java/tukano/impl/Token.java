@@ -30,9 +30,11 @@ public class Token {
 
 	public static boolean isValid(String tokenStr, String id) {
 		try {
+			System.out.println(tokenStr);
 			var bits = tokenStr.split(DELIMITER);
 			var timestamp = Long.valueOf(bits[0]);
 			var hmac = Hash.of(id, timestamp, secret);
+			System.out.println(hmac);
 			var elapsed = Math.abs(System.currentTimeMillis() - timestamp);			
 			Log.info(String.format("hash ok:%s, elapsed %s ok: %s\n", hmac.equals(bits[1]), elapsed, elapsed < MAX_TOKEN_AGE));
 			return hmac.equals(bits[1]) && elapsed < MAX_TOKEN_AGE;			

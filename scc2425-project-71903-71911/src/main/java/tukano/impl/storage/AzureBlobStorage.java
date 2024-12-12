@@ -24,7 +24,7 @@ public class AzureBlobStorage implements BlobStorage {
             .buildClient();
 
     @Override
-    public Result<Void> write(byte[] bytes) {
+    public Result<Void> write(String path, byte[] bytes) {
         String key = Hash.of(bytes);
 
         BinaryData data = BinaryData.fromBytes(bytes);
